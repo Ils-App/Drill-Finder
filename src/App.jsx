@@ -1,4 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://bzdjlvubytgztwnvoqqz.supabase.co",
+  "sb_publishable_L3OhxoZ5_dwn1Z7JUzJWDg_TiQY4Tir"
+);
 
 // ------------------------- DRILL DATABASE -------------------------
 const DRILLS = [
@@ -5874,8 +5880,54 @@ const DRILLS = [
   { name: "Anchor Session Plan: Advanced High", sport: "Esports", ages: ["U8", "U10", "U12", "U14", "U16", "Adult"], difficulty: "Advanced", intensity: "High", duration: 30, players: "Any", equipment: "Standard equipment for the sport", desc: "Advanced-level fast, competitive rounds built on the sport's core actions, scaled to the age group in front of you. A ready-made plan for exactly this slot in practice." },
 ];
 
-const DIAGRAMS = {};
-const COACHING = {};
+const DIAGRAMS = {
+  "Rondo 4v1|Soccer": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><rect x="50" y="25" width="200" height="130" fill="none" stroke="#F4F7F2" stroke-opacity="0.4" stroke-dasharray="6 5" stroke-width="2"/><circle cx="50" cy="90" r="9" fill="#FFD23F"/><circle cx="250" cy="90" r="9" fill="#FFD23F"/><circle cx="150" cy="25" r="9" fill="#FFD23F"/><circle cx="150" cy="155" r="9" fill="#FFD23F"/><circle cx="150" cy="90" r="9" fill="#FF7A48"/><text x="150" y="94" font-size="10" text-anchor="middle" fill="#0A2B21" font-weight="bold">D</text><path d="M 64 84 Q 105 55 138 32" fill="none" stroke="#F4F7F2" stroke-width="1.6" marker-end="url(#a1)"/><path d="M 162 32 Q 205 55 238 82" fill="none" stroke="#F4F7F2" stroke-width="1.6" marker-end="url(#a1)"/><path d="M 244 102 Q 200 135 164 150" fill="none" stroke="#F4F7F2" stroke-width="1.6" marker-end="url(#a1)"/><text x="150" y="174" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">4 passers keep the ball away from the defender (D)</text></svg>',
+  "Sharks & Minnows|Soccer": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#FFD23F" stroke-width="1.5"/></marker></defs><rect x="30" y="20" width="240" height="130" fill="none" stroke="#F4F7F2" stroke-opacity="0.4" stroke-width="2"/><circle cx="45" cy="45" r="8" fill="#FFD23F"/><circle cx="45" cy="85" r="8" fill="#FFD23F"/><circle cx="45" cy="125" r="8" fill="#FFD23F"/><circle cx="150" cy="60" r="8" fill="#FF7A48"/><circle cx="150" cy="110" r="8" fill="#FF7A48"/><path d="M 58 45 L 250 45" stroke="#FFD23F" stroke-width="1.6" fill="none" marker-end="url(#a2)"/><path d="M 58 85 L 250 85" stroke="#FFD23F" stroke-width="1.6" fill="none" marker-end="url(#a2)"/><path d="M 58 125 L 250 125" stroke="#FFD23F" stroke-width="1.6" fill="none" marker-end="url(#a2)"/><text x="150" y="168" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Minnows (yellow) dribble across; sharks (orange) hunt in the middle</text></svg>',
+  "Cone Slalom Relay|Soccer": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><polygon points="80,80 74,94 86,94" fill="#FFD23F"/><polygon points="120,80 114,94 126,94" fill="#FFD23F"/><polygon points="160,80 154,94 166,94" fill="#FFD23F"/><polygon points="200,80 194,94 206,94" fill="#FFD23F"/><polygon points="240,80 234,94 246,94" fill="#FFD23F"/><circle cx="40" cy="87" r="9" fill="#FFD23F"/><path d="M 52 87 Q 80 60 100 87 Q 120 114 140 87 Q 160 60 180 87 Q 200 114 220 87 Q 235 70 255 80" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a3)"/><text x="150" y="140" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Weave through every cone, then sprint back to tag the next player</text></svg>',
+  "3-Man Weave|Basketball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><circle cx="270" cy="90" r="14" fill="none" stroke="#F4F7F2" stroke-opacity="0.6" stroke-width="2"/><circle cx="30" cy="40" r="9" fill="#FFD23F"/><text x="30" y="44" font-size="9" text-anchor="middle" fill="#0A2B21" font-weight="bold">1</text><circle cx="30" cy="90" r="9" fill="#FFD23F"/><text x="30" y="94" font-size="9" text-anchor="middle" fill="#0A2B21" font-weight="bold">2</text><circle cx="30" cy="140" r="9" fill="#FFD23F"/><text x="30" y="144" font-size="9" text-anchor="middle" fill="#0A2B21" font-weight="bold">3</text><path d="M 42 88 Q 90 40 140 60 Q 190 85 250 88" fill="none" stroke="#F4F7F2" stroke-width="1.6" marker-end="url(#a4)"/><path d="M 42 42 Q 100 90 150 110 Q 200 128 246 98" fill="none" stroke="#F4F7F2" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#a4)"/><path d="M 42 138 Q 100 95 150 68" fill="none" stroke="#F4F7F2" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#a4)"/><text x="150" y="168" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Pass and cut behind the receiver, weaving to a layup</text></svg>',
+  "Dribble Knockout|Basketball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><circle cx="150" cy="88" r="65" fill="none" stroke="#F4F7F2" stroke-opacity="0.4" stroke-dasharray="6 5" stroke-width="2"/><circle cx="150" cy="45" r="9" fill="#FFD23F"/><circle cx="195" cy="70" r="9" fill="#FFD23F"/><circle cx="190" cy="120" r="9" fill="#FFD23F"/><circle cx="150" cy="132" r="9" fill="#FFD23F"/><circle cx="108" cy="118" r="9" fill="#FFD23F"/><circle cx="105" cy="68" r="9" fill="#FFD23F"/><circle cx="156" cy="52" r="3.5" fill="#F4F7F2"/><circle cx="201" cy="77" r="3.5" fill="#F4F7F2"/><circle cx="184" cy="127" r="3.5" fill="#F4F7F2"/><circle cx="144" cy="139" r="3.5" fill="#F4F7F2"/><circle cx="102" cy="125" r="3.5" fill="#F4F7F2"/><circle cx="111" cy="75" r="3.5" fill="#F4F7F2"/><text x="150" y="172" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Everyone dribbles inside the circle - protect yours, knock out theirs</text></svg>',
+  "Zig-Zag Closeouts|Basketball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#FF7A48" stroke-width="1.5"/></marker></defs><circle cx="40" cy="140" r="9" fill="#FF7A48"/><path d="M 50 132 L 100 95 L 70 62 L 130 40" fill="none" stroke="#FF7A48" stroke-width="1.8" marker-end="url(#a6)"/><circle cx="200" cy="35" r="9" fill="#FFD23F"/><circle cx="207" cy="42" r="3.5" fill="#F4F7F2"/><path d="M 140 38 L 182 36" fill="none" stroke="#FF7A48" stroke-width="1.8" stroke-dasharray="3 3" marker-end="url(#a6)"/><text x="95" y="120" font-size="9" fill="#F4F7F2" opacity="0.8">slide</text><text x="160" y="28" font-size="9" fill="#F4F7F2" opacity="0.8">sprint + closeout</text><text x="150" y="168" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Defender zig-zag slides, then sprints into a controlled closeout on the shooter</text></svg>',
+  "Pepper|Volleyball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a7" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><circle cx="70" cy="120" r="10" fill="#FFD23F"/><circle cx="230" cy="120" r="10" fill="#FFD23F"/><path d="M 80 110 Q 150 40 220 110" fill="none" stroke="#F4F7F2" stroke-width="1.6" marker-end="url(#a7)"/><path d="M 222 132 Q 150 165 78 132" fill="none" stroke="#F4F7F2" stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#a7)"/><text x="150" y="55" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.8">set / hit</text><text x="150" y="158" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.8">dig / pass</text><text x="150" y="30" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Two players cycle pass - set - hit without letting the ball drop</text></svg>',
+  "Queen of the Court 3v3|Volleyball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#FFD23F" stroke-width="1.5"/></marker></defs><rect x="30" y="30" width="240" height="110" fill="none" stroke="#F4F7F2" stroke-opacity="0.4" stroke-width="2"/><line x1="150" y1="22" x2="150" y2="148" stroke="#F4F7F2" stroke-width="3" stroke-opacity="0.8"/><circle cx="80" cy="55" r="8" fill="#FFD23F"/><circle cx="60" cy="90" r="8" fill="#FFD23F"/><circle cx="95" cy="118" r="8" fill="#FFD23F"/><circle cx="220" cy="55" r="8" fill="#FF7A48"/><circle cx="240" cy="90" r="8" fill="#FF7A48"/><circle cx="205" cy="118" r="8" fill="#FF7A48"/><text x="80" y="20" font-size="9" text-anchor="middle" fill="#FFD23F">QUEEN SIDE</text><text x="222" y="20" font-size="9" text-anchor="middle" fill="#FF7A48">CHALLENGERS</text><path d="M 250 155 Q 275 170 285 140" fill="none" stroke="#FFD23F" stroke-width="1.4" marker-end="url(#a8)"/><text x="150" y="172" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Win the rally to take or keep the queen side; losers rotate off</text></svg>',
+  "King of the Court|Tennis": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#FFD23F" stroke-width="1.5"/></marker></defs><rect x="40" y="35" width="220" height="100" fill="none" stroke="#F4F7F2" stroke-opacity="0.5" stroke-width="2"/><line x1="150" y1="30" x2="150" y2="140" stroke="#F4F7F2" stroke-width="2.5" stroke-opacity="0.8"/><line x1="40" y1="85" x2="260" y2="85" stroke="#F4F7F2" stroke-opacity="0.3" stroke-width="1"/><circle cx="85" cy="85" r="9" fill="#FFD23F"/><text x="85" y="24" font-size="9" text-anchor="middle" fill="#FFD23F">KING</text><circle cx="215" cy="85" r="9" fill="#FF7A48"/><circle cx="285" cy="60" r="7" fill="#FF7A48" opacity="0.7"/><circle cx="285" cy="85" r="7" fill="#FF7A48" opacity="0.5"/><circle cx="285" cy="110" r="7" fill="#FF7A48" opacity="0.3"/><path d="M 276 85 L 232 85" fill="none" stroke="#FFD23F" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#a9)"/><text x="150" y="165" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Challengers rotate in every point; beat the king to take the throne</text></svg>',
+  "Around the Horn|Baseball/Softball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><rect x="142" y="132" width="16" height="16" fill="#F4F7F2" transform="rotate(45 150 140)"/><rect x="212" y="82" width="14" height="14" fill="#F4F7F2" transform="rotate(45 219 89)"/><rect x="143" y="32" width="14" height="14" fill="#F4F7F2" transform="rotate(45 150 39)"/><rect x="74" y="82" width="14" height="14" fill="#F4F7F2" transform="rotate(45 81 89)"/><path d="M 162 132 L 210 100" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a10)"/><path d="M 210 78 L 162 46" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a10)"/><path d="M 138 46 L 92 78" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a10)"/><path d="M 92 100 L 138 132" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a10)"/><text x="150" y="170" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Whip the ball around all four bases against the clock</text></svg>',
+  "Ground Ball Triangle|Baseball/Softball": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a11" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><circle cx="150" cy="40" r="10" fill="#FFD23F"/><circle cx="70" cy="130" r="10" fill="#FFD23F"/><circle cx="230" cy="130" r="10" fill="#FFD23F"/><path d="M 140 50 Q 95 85 80 118" fill="none" stroke="#F4F7F2" stroke-width="1.7" marker-end="url(#a11)"/><path d="M 84 130 L 216 130" fill="none" stroke="#F4F7F2" stroke-width="1.7" marker-end="url(#a11)"/><path d="M 222 118 Q 205 85 160 50" fill="none" stroke="#F4F7F2" stroke-width="1.7" marker-end="url(#a11)"/><text x="150" y="167" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Roll a grounder to the next corner, then follow your throw</text></svg>',
+  "Figure-8 Puck Control|Ice Hockey": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><polygon points="100,82 92,98 108,98" fill="#FFD23F"/><polygon points="200,82 192,98 208,98" fill="#FFD23F"/><path d="M 150 90 C 150 50 60 50 60 90 C 60 130 150 130 150 90 C 150 50 240 50 240 90 C 240 130 150 128 152 94" fill="none" stroke="#F4F7F2" stroke-width="1.8" marker-end="url(#a12)"/><text x="150" y="160" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Weave the puck in a figure-8 around both cones, eyes up</text></svg>',
+  "Star Passing|Lacrosse": '<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a13" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#F4F7F2" stroke-width="1.5"/></marker></defs><circle cx="150" cy="30" r="9" fill="#FFD23F"/><circle cx="245" cy="95" r="9" fill="#FFD23F"/><circle cx="208" cy="155" r="9" fill="#FFD23F"/><circle cx="92" cy="155" r="9" fill="#FFD23F"/><circle cx="55" cy="95" r="9" fill="#FFD23F"/><path d="M 158 38 L 200 145" fill="none" stroke="#F4F7F2" stroke-width="1.5" marker-end="url(#a13)"/><path d="M 198 152 L 66 100" fill="none" stroke="#F4F7F2" stroke-width="1.5" marker-end="url(#a13)"/><path d="M 64 88 L 236 92" fill="none" stroke="#F4F7F2" stroke-width="1.5" marker-end="url(#a13)"/><path d="M 236 102 L 102 150" fill="none" stroke="#F4F7F2" stroke-width="1.5" marker-end="url(#a13)"/><path d="M 90 146 L 144 40" fill="none" stroke="#F4F7F2" stroke-width="1.5" marker-end="url(#a13)"/><text x="150" y="176" font-size="9" text-anchor="middle" fill="#F4F7F2" opacity="0.7">Pass in a star pattern, following each pass to the next point</text></svg>',
+};
+
+const COACHING = {
+  "Rondo 4v1|Soccer": { cues: ["Receive on the back foot, opening your body to the whole square", "Pass with pace - soft passes get intercepted", "Move a step after every pass to give a new angle"], mistakes: ["Passers standing frozen on the cones", "Chipping the ball over the defender instead of passing around", "Defender jogging instead of hunting"], easier: "Bigger square, add a fifth passer, or give passers two touches.", harder: "One-touch only, shrink the square, or add a second defender (4v2)." },
+  "Sharks & Minnows|Soccer": { cues: ["Heads up while dribbling - see the shark before it sees you", "Change speed to escape, not just direction", "Small touches in traffic, big touch into open space"], mistakes: ["Kicking the ball too far ahead and chasing it", "Everyone running the same straight line", "Sharks lunging instead of steering minnows wide"], easier: "Fewer sharks, wider field, or let tagged minnows re-enter after 10 toe taps.", harder: "More sharks, shrink the field, or sharks must win the ball (not just touch it)." },
+  "Cone Slalom Relay|Soccer": { cues: ["Both feet, inside and outside of the boot", "Slow through the cones, sprint after the last one", "Look up between every touch"], mistakes: ["Racing so fast the ball skips cones (count skipped cones as restarts)", "Only using the strong foot", "Big first touch that beats the whole line"], easier: "Wider cone spacing, walk-through pace first.", harder: "Weak foot only, add a defender at the end, or time each runner." },
+  "2v2 to Small Goals|Soccer": { cues: ["First attacker takes the defender on; second attacker gives an angle", "Defend goal-side, force play wide", "Score fast after winning the ball - the counter is the best chance"], mistakes: ["Both attackers standing on the same line", "Defenders diving in on the first touch", "No talk between partners"], easier: "Make it 3v2 for attackers or widen the goals.", harder: "Two-touch limit, or goals only count from one-touch finishes." },
+  "Wall Pass Pairs|Soccer": { cues: ["Firm pass, locked ankle, strike through the middle of the ball", "First touch out of your feet, not underneath you", "Follow your pass with a step - stay live"], mistakes: ["Passing while flat-footed", "Watching the foot instead of the target", "Letting the ball bounce before controlling"], easier: "Closer distance, allow two touches.", harder: "One-touch, alternate feet, or add a passing pattern call." },
+  "3-Man Weave|Basketball": { cues: ["Pass ahead of the runner, hit them in stride", "Cut hard behind the receiver - banana cuts kill the drill", "Finish with a layup at full speed, not a jog"], mistakes: ["Throwing lobs instead of crisp chest passes", "Middle player watching instead of sprinting", "Traveling on the catch"], easier: "Walk through the pattern first, allow a dribble between passes.", harder: "No dribbles allowed, add a trailing defender, or require a made layup to count." },
+  "Mikan Drill|Basketball": { cues: ["High off the glass, soft touch", "Opposite hand and opposite foot - right hand, left leg up", "Keep the ball above your shoulders the whole time"], mistakes: ["Bringing the ball down to the waist between shots", "Jumping off the wrong foot", "Rushing and missing short"], easier: "Pause and reset between each shot.", harder: "Reverse layups, timed makes in 30 seconds, or eyes-closed footwork reps." },
+  "Shell Defense 4v4|Basketball": { cues: ["One pass away: deny. Two passes away: help side, see ball and man", "Jump to the ball on every pass", "Talk: call ball, help, and screens loudly"], mistakes: ["Ball-watching and losing your man", "Standing upright instead of in a stance", "Helping too late, after the drive has beaten you"], easier: "Offense passes only (no drives) while defense learns rotations.", harder: "Live 4v4 with drives, or defense must get three straight stops to rotate out." },
+  "Free Throw Pressure Ladder|Basketball": { cues: ["Same routine every shot - bounce, breathe, shoot", "Eyes on the rim, not the ball flight", "Hold the follow-through until the ball hits"], mistakes: ["Different routine when tired or nervous", "Rushing the second shot after a miss", "Flat shots with no arc"], easier: "Shorter ladder, shoot in pairs for support.", harder: "Whole team runs on your miss, or shoot immediately after sprints." },
+  "Dribble Knockout|Basketball": { cues: ["Low dribble, ball on your hip away from attackers", "Eyes up scanning - never look at your own ball", "Attack when others battle each other"], mistakes: ["Dribbling high at the waist in traffic", "Hiding in the corner the whole game", "Reaching wildly and losing your own ball"], easier: "Bigger circle, no knockouts for the first 30 seconds.", harder: "Weak hand only, shrink the circle every 30 seconds." },
+  "Pepper|Volleyball": { cues: ["Platform early and still on the dig - angle it, do not swing it", "Set high and hittable, right at your partner", "Controlled hit at your partner's platform, not past them"], mistakes: ["Swinging arms on the pass", "Sets drifting sideways forcing chases", "Hitting to win instead of hitting to continue"], easier: "Toss-pass-catch first, then add the hit.", harder: "One partner defends only with the left platform, or go for a record streak." },
+  "Butterfly Serve-Receive|Volleyball": { cues: ["Beat the ball to the spot - stopped feet before contact", "Face the target, angle the platform to the setter", "Call MINE early and loud"], mistakes: ["Drifting through the pass while moving", "Platform aimed back at the server", "Following your pass instead of following the rotation path"], easier: "Down-ball serves or tosses instead of full serves.", harder: "Jump-float serves, or track team passing average with a target score." },
+  "Queen of the Court 3v3|Volleyball": { cues: ["First contact is everything - a good pass wins rallies", "Cover your hitter on every swing", "Serve tough even when tired - free balls lose thrones"], mistakes: ["Trying hero shots on match point", "No communication on balls between players", "Standing spectators on the non-ball side"], easier: "Coach enters a free ball to start each rally.", harder: "Queens side must win by attacking only (no free-ball wins)." },
+  "Serving Zones Bingo|Volleyball": { cues: ["Consistent toss - same height, same spot, every time", "Firm wrist, contact the middle-back of the ball", "Pick the zone BEFORE the toss, not during"], mistakes: ["Chasing a bad toss (let it drop, re-toss)", "Aiming with the arm instead of the body line", "Serving harder when missing instead of cleaner"], easier: "Serve from mid-court, bigger zones.", harder: "Must hit zones in order, or call the zone out loud first." },
+  "King of the Court|Tennis": { cues: ["Recover to the middle after every shot", "Deep and crosscourt when in trouble", "Attack short balls - take them early and move in"], mistakes: ["Admiring your shot instead of recovering", "Going for winners from defensive positions", "Same serve every point - be unpredictable"], easier: "Feed each point in instead of serving, play to 2 points.", harder: "King must win to 3, challengers start with a feed advantage." },
+  "Serve & First Ball|Tennis": { cues: ["Serve with a target, not just in", "Split-step as the return is struck", "First ball goes deep - buy time to take the net or control the rally"], mistakes: ["Watching the serve instead of preparing for the return", "First ball aimed at winners instead of depth", "Falling backward after serving"], easier: "Second-serve pace only, half-court targets.", harder: "Serve plus first ball must follow a called pattern (wide serve, open-court forehand)." },
+  "Around the Horn|Baseball/Softball": { cues: ["Catch with two hands, transfer across the chest fast", "Step toward your target on every throw", "Loud base calls before the ball arrives"], mistakes: ["Throwing before securing the catch", "Rainbow lobs instead of firm line throws", "Receivers standing off the bag"], easier: "Shorter bases, underhand tosses first.", harder: "Race the clock, reverse direction on a whistle, or two balls at once." },
+  "Ground Ball Triangle|Baseball/Softball": { cues: ["Butt down, glove out front where you can see it", "Feet moving through the ball - field moving forward", "Funnel to the belly, then throw"], mistakes: ["Fielding to the side of the body", "Standing up before securing the ball", "Lazy feet waiting on hops instead of attacking them"], easier: "Rolled balls, shorter distances.", harder: "Firm fungo grounders, backhand-only rounds, add a time trial." },
+  "Tee Work Stations|Baseball/Softball": { cues: ["Load, stride, then swing - in that order", "Drive through the ball, finish high", "Eyes on the contact point even after the hit"], mistakes: ["Swinging with arms only, no hip turn", "Head pulling out toward the field", "Tee set too far forward or back for the pitch being trained"], easier: "Bigger ball or shorter bat to groove contact.", harder: "Low-and-away tee placements, top-hand-only swings, call the target field before each swing." },
+  "Route Tree Progression|Football": { cues: ["Sell every route as a go route for the first three steps", "Sharp cuts off a planted outside foot", "Snap the head around as you break - the ball comes fast"], mistakes: ["Rounding cuts into curves", "Slowing down before the break (telegraphs the route)", "Catching with the body instead of hands"], easier: "Walk-through routes with no ball, then jog tempo.", harder: "Press-look defender shading the release, or full-speed timing with the QB." },
+  "Flag Pull Relay|Football": { cues: ["Break down into short choppy steps before the pull", "Eyes on the hips - hips do not lie, fakes do", "Two hands reaching for one flag"], mistakes: ["Lunging from too far away", "Watching the ball or the eyes instead of the belt", "Standing tall and getting juked"], easier: "Runner jogs in a straight line.", harder: "Runner at full speed with one juke allowed in a narrow alley." },
+  "Figure-8 Puck Control|Ice Hockey": { cues: ["Roll the wrists - cup the puck on both sides of the blade", "Knees bent, chest up, eyes off the puck as much as possible", "Puck moves, then feet follow - not the reverse"], mistakes: ["Stickhandling straight-armed away from the body", "Staring down at the puck the entire pattern", "Standing tall through the turns"], easier: "Wider cones, slower pace, glance down as needed.", harder: "Head fully up counting a coach's fingers, add a time trial, or backward sections." },
+  "2-on-1 Rush Reps|Ice Hockey": { cues: ["Puck carrier attacks with speed - make the defender commit", "Non-puck player drives the far post with the stick on the ice", "Pass or shoot early - waiting lets the D recover"], mistakes: ["Both attackers gliding at the same speed on the same line", "Passing through the defender's stick (use the pass lane the D gives you)", "Shooting from a bad angle when the pass was open"], easier: "Coach as a passive defender.", harder: "Backchecker chases the rush, or require a one-timer finish." },
+  "Catch-Up Freestyle|Swimming": { cues: ["One arm waits stretched out front until the other touches it", "Long body line - reach through the water, not over it", "Steady kick throughout, even while the arms pause"], mistakes: ["Arms meeting in the middle instead of at full extension", "Head lifting during the breath", "Kick stopping every time the arms switch"], easier: "Use a kickboard front hand as the touch target.", harder: "Closed-fist catch-up, or add breathing every 5 strokes." },
+  "Baton Exchange Zones|Track & Field": { cues: ["Outgoing runner GOES on the mark - trust, do not look back", "Loud command, then a steady target hand", "Exchange at full speed inside the zone, ideally late in it"], mistakes: ["Outgoing runner leaving too early or too late (adjust the go-mark, not the effort)", "Looking back for the baton and slowing down", "Baton exchanged between two decelerating runners"], easier: "Walk then jog exchanges to groove the timing.", harder: "Full-speed exchanges timed through the zone, compete relay vs relay." },
+  "Flying 30s|Track & Field": { cues: ["Build smoothly through the run-in - hit the zone at max speed", "Tall posture, relaxed jaw and hands at top speed", "Fast arms drive fast legs"], mistakes: ["Straining and tightening up at max velocity", "Chopping steps entering the timing zone", "Short recovery turning speed work into conditioning"], easier: "Flying 20s with a longer build-up.", harder: "Time every rep and chase a personal best with full 3-4 minute rests." },
+  "Crosscourt Dink Battle|Pickleball": { cues: ["Contact out front, push from the shoulder - no wrist flick", "Every dink lands in the kitchen, unattackable", "Patience wins - the first player to get greedy usually loses"], mistakes: ["Backing off the kitchen line between dinks", "Hitting down on the ball (it goes into the net)", "Speeding up from below net height"], easier: "Cooperative dink rally to 20 before playing points.", harder: "Only winners from a forced pop-up count, or targets in the kitchen corners." },
+  "Third Shot Drop Reps|Pickleball": { cues: ["Loft it - the ball should peak on YOUR side of the net", "Soft grip pressure, lift with the legs", "Follow the drop forward toward the kitchen"], mistakes: ["Driving the third shot low into net players", "Staying at the baseline after a good drop", "Same drop every time - mix in an occasional drive to stay honest"], easier: "Drop from mid-court instead of the baseline.", harder: "Defenders volley every drop, count how many earn you the kitchen line." },
+  "Agility Ladder Series|General Fitness": { cues: ["Balls of the feet - quiet, quick contacts", "Arms pump with the feet, elbows at 90", "Precision first, then speed"], mistakes: ["Looking down at the ladder the whole time", "Flat-footed stomping", "Speeding up until the pattern falls apart (and staying there)"], easier: "Master each pattern at walking speed first.", harder: "Add a sprint out of the ladder, race side-by-side ladders." },
+  "Cone Reaction Sprints|General Fitness": { cues: ["Athletic stance between signals - ready to move any direction", "First step is short and explosive, not a big reach", "Decelerate under control, chest over knees"], mistakes: ["Standing upright waiting for the call", "Rounding off changes of direction", "Sprinting through cones instead of touching or planting"], easier: "Slower calls with a point instead of a word.", harder: "Reverse commands (called left means go right), add a partner race." },
+};
 
 const SPORTS = ["All", "Soccer", "Futsal", "Basketball", "Football", "Flag Football", "Baseball/Softball", "Kickball", "Volleyball", "Beach Volleyball", "Tennis", "Padel", "Ice Hockey", "Field Hockey", "Floorball", "Lacrosse", "Rugby", "Gaelic Football", "Hurling & Camogie", "Australian Football", "Cricket", "Handball", "Netball", "Korfball", "Tchoukball", "Kabaddi", "Ultimate Frisbee", "Dodgeball", "Water Polo", "Swimming", "Diving", "Artistic Swimming", "Track & Field", "Cross Country", "Triathlon", "Rowing", "Sailing", "Cycling", "Speed Skating", "Roller & Inline Skating", "Golf", "Bowling", "Darts", "Cue Sports", "Curling", "Badminton", "Table Tennis", "Pickleball", "Squash", "Racquetball", "Archery", "Fencing", "Boxing", "Martial Arts", "Karate & Taekwondo", "Judo & BJJ", "Wrestling", "Weightlifting", "Powerlifting", "Gymnastics", "Trampoline", "Figure Skating", "Cheer & Dance", "Breaking", "Climbing", "Parkour", "Skateboarding", "Skiing & Snowboarding", "Surfing", "Equestrian", "Orienteering", "Esports", "General Fitness"];
 const AGES = ["All", "U8", "U10", "U12", "U14", "U16", "Adult"];
@@ -5921,6 +5973,23 @@ export default function DrillFinder() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [myOnly, setMyOnly] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [tipsDismissed, setTipsDismissed] = useState(false);
+  const [session, setSession] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session || null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!session) { setIsPremium(false); return; }
+    supabase.from("profiles").select("is_premium").eq("id", session.user.id).single()
+      .then(({ data }) => setIsPremium(!!(data && data.is_premium)));
+  }, [session]);
+  React.useEffect(() => { if (showPlan) setTipsDismissed(false); }, [showPlan]);
 
   React.useEffect(() => { store.set("df_favorites", favorites); }, [favorites]);
   React.useEffect(() => { store.set("df_plan", plan); }, [plan]);
@@ -5935,7 +6004,7 @@ export default function DrillFinder() {
   const planMinutes = planDrills.reduce((s, d) => s + d.duration, 0);
   const planTips = useMemo(() => {
     const tips = [];
-    if (false) {
+    if (isPremium && planDrills.length >= 2) {
       if (planDrills[0].intensity === "High") tips.push("Your first drill is high intensity — consider opening with something low intensity as a warmup.");
       for (let i = 0; i < planDrills.length - 1; i++) {
         if (planDrills[i].intensity === "High" && planDrills[i + 1].intensity === "High") { tips.push("Two high-intensity drills back-to-back — a lower-intensity drill between them keeps quality up."); break; }
@@ -5944,7 +6013,7 @@ export default function DrillFinder() {
       if (planMinutes > 95) tips.push("This plan runs over 95 minutes — long for most youth sessions. Consider trimming a drill.");
     }
     return tips;
-  }, [planDrills, planMinutes]);
+  }, [planDrills, planMinutes, isPremium]);
 
   const filtered = useMemo(() => {
     const bucket = DURATIONS.find((d) => d.label === duration);
@@ -6014,6 +6083,18 @@ export default function DrillFinder() {
         <button className="navBtn" onClick={() => { setShowPlan(true); setNavOpen(false); }}>📋 Practice plan{plan.length ? " (" + plan.length + " · ~" + planMinutes + "m)" : ""}</button>
         <button className="navBtn" onClick={() => { surpriseMe(); setNavOpen(false); }}>🎲 Pick one for me</button>
         {anyFilter && <button className="navBtn" onClick={() => { resetAll(); setNavOpen(false); }}>✖ Clear filters</button>}
+        <div style={{ marginTop: "auto", borderTop: "2px dashed " + LINE, paddingTop: 10 }}>
+          {session ? (
+            <>
+              <div style={{ fontSize: 11, opacity: 0.7, padding: "0 12px 6px", wordBreak: "break-all" }}>
+                {session.user.email}{isPremium ? " · ⭐ Premium" : ""}
+              </div>
+              <button className="navBtn" onClick={() => { supabase.auth.signOut(); setNavOpen(false); }}>🚪 Sign out</button>
+            </>
+          ) : (
+            <button className="navBtn" onClick={() => { setShowAuth(true); setNavOpen(false); }}>👤 Sign in</button>
+          )}
+        </div>
       </nav>
       {navOpen && <div className="navScrim noPrint" onClick={() => setNavOpen(false)} />}
 
@@ -6071,7 +6152,7 @@ export default function DrillFinder() {
         ) : (
           <>
             {filtered.slice(0, visibleCount).map((d) => (
-              <DrillCard key={keyOf(d)} drill={d} highlighted={highlight === d.name}
+              <DrillCard key={keyOf(d)} drill={d} highlighted={highlight === d.name} premium={isPremium}
                 isFav={favSet.has(keyOf(d))} inPlan={planSet.has(keyOf(d))}
                 onFav={() => toggleFav(keyOf(d))} onPlan={() => togglePlan(keyOf(d))}
                 onDelete={d.custom ? () => setCustomDrills((c) => c.filter((x) => keyOf(x) !== keyOf(d))) : null} />
@@ -6107,8 +6188,10 @@ export default function DrillFinder() {
                 <button className="whistleBtn" onClick={() => setShowPlan(false)}>Done</button>
               </div>
             </div>
-            {planTips.length > 0 && (
-              <div style={{ background: "rgba(255,210,63,0.08)", border: "1px dashed " + LINE, borderRadius: 10, padding: "10px 14px", marginBottom: 12, fontSize: 12.5 }} className="noPrint">
+            {planTips.length > 0 && !tipsDismissed && (
+              <div style={{ position: "relative", background: "rgba(255,210,63,0.08)", border: "1px dashed " + LINE, borderRadius: 10, padding: "10px 30px 10px 14px", marginBottom: 12, fontSize: 12.5 }} className="noPrint">
+                <button aria-label="Dismiss tips" onClick={() => setTipsDismissed(true)}
+                  style={{ position: "absolute", top: 6, right: 8, background: "none", border: "none", color: CHALK, opacity: 0.6, fontSize: 14, cursor: "pointer", padding: 2 }}>✕</button>
                 <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 11, letterSpacing: 2, color: CONE, marginBottom: 4 }}>💡 COACH'S TIPS</div>
                 {planTips.map((tip, i) => <div key={i} style={{ opacity: 0.9, marginTop: 2 }}>• {tip}</div>)}
               </div>
@@ -6130,6 +6213,8 @@ export default function DrillFinder() {
           </div>
         </div>
       )}
+
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
       {showAddForm && (
         <AddDrillForm
@@ -6183,7 +6268,7 @@ function SportFilterRow({ options, value, onChange, search, setSearch }) {
   );
 }
 
-function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete }) {
+function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete, premium }) {
   const [open, setOpen] = useState(false);
   return (
     <div id={"drill-" + (drill.name + drill.sport).replace(/[^a-zA-Z0-9]/g, "-")}
@@ -6191,8 +6276,8 @@ function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete 
       <div style={S.cardTop}>
         <span style={S.sportTag}>{drill.sport}{drill.custom && <span style={{ color: "#7BC894", letterSpacing: 1 }}> · YOUR DRILL</span>}{drill.exact === false && <span style={S.adaptTag}> · adaptable fit</span>}</span>
         <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          {COACHING[keyOf(drill)] && <span title="Coaching points inside" style={{ fontSize: 12 }}>🎯</span>}
-          {DIAGRAMS[keyOf(drill)] && <span title="Diagram inside" style={{ fontSize: 12 }}>📐</span>}
+          {premium && COACHING[keyOf(drill)] && <span title="Coaching points inside" style={{ fontSize: 12 }}>🎯</span>}
+          {premium && DIAGRAMS[keyOf(drill)] && <span title="Diagram inside" style={{ fontSize: 12 }}>📐</span>}
           <span style={{ ...S.intensityDot, background: INTENSITY_COLOR[drill.intensity] }} title={drill.intensity + " intensity"} />
         </span>
       </div>
@@ -6203,7 +6288,12 @@ function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete 
         <span style={S.meta}>{drill.difficulty}</span>
       </div>
       <p style={{ ...S.desc, ...(open ? {} : S.descClamp) }}>{drill.desc}</p>
-      {open && COACHING[keyOf(drill)] && (
+      {open && !premium && (COACHING[keyOf(drill)] || DIAGRAMS[keyOf(drill)]) && (
+        <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px dashed " + LINE, fontSize: 12, opacity: 0.65 }}>
+          🔒 Coaching points{DIAGRAMS[keyOf(drill)] ? " & tactical diagram" : ""} available with Premium
+        </div>
+      )}
+      {open && premium && COACHING[keyOf(drill)] && (
         <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px dashed " + LINE, fontSize: 12.5, lineHeight: 1.6 }}>
           <div style={{ fontFamily: "'Oswald', sans-serif", fontSize: 11, letterSpacing: 2, color: CONE, marginBottom: 4 }}>🎯 COACHING POINTS</div>
           {COACHING[keyOf(drill)].cues.map((c, i) => <div key={i} style={{ opacity: 0.9 }}>• {c}</div>)}
@@ -6213,7 +6303,7 @@ function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete 
           <div style={{ marginTop: 4, opacity: 0.9 }}><strong style={{ color: "#FF7A48" }}>Harder:</strong> {COACHING[keyOf(drill)].harder}</div>
         </div>
       )}
-      {open && DIAGRAMS[keyOf(drill)] && (
+      {open && premium && DIAGRAMS[keyOf(drill)] && (
         <div style={{ marginTop: 12, background: "rgba(0,0,0,0.2)", borderRadius: 10, padding: 6 }}
           dangerouslySetInnerHTML={{ __html: DIAGRAMS[keyOf(drill)] }} />
       )}
@@ -6235,6 +6325,53 @@ function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete 
           <button className="miniBtn" onClick={(e) => { e.stopPropagation(); if (window.confirm("Delete this drill?")) onDelete(); }}>🗑</button>
         )}
         <span style={S.expandHint}>{open ? "▲ less" : "▼ details"}</span>
+      </div>
+    </div>
+  );
+}
+
+function AuthModal({ onClose }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+  const inputStyle = { width: "100%", fontFamily: "'Inter', sans-serif", fontSize: 14, padding: "9px 12px", borderRadius: 8, border: "1.5px solid " + LINE, background: "rgba(0,0,0,0.15)", color: CHALK, outline: "none", boxSizing: "border-box" };
+  const labelStyle = { fontFamily: "'Oswald', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: CONE, display: "block", margin: "14px 0 6px" };
+
+  const signIn = async () => {
+    setErr(""); setMsg(""); setBusy(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setBusy(false);
+    if (error) setErr(error.message); else onClose();
+  };
+  const signUp = async () => {
+    setErr(""); setMsg("");
+    if (!email.trim() || password.length < 6) return setErr("Enter your email and a password of at least 6 characters.");
+    setBusy(true);
+    const { data, error } = await supabase.auth.signUp({ email: email.trim(), password });
+    setBusy(false);
+    if (error) return setErr(error.message);
+    if (data.session) onClose();
+    else setMsg("Almost there — check your email to confirm your account, then sign in.");
+  };
+
+  return (
+    <div style={S.planOverlay} onClick={onClose}>
+      <div style={{ ...S.planSheet, maxWidth: 420 }} onClick={(e) => e.stopPropagation()}>
+        <h2 style={{ fontFamily: "'Oswald', sans-serif", margin: 0, letterSpacing: 1 }}>COACH SIGN IN</h2>
+        <p style={{ fontSize: 12.5, opacity: 0.75, marginTop: 6 }}>One account for your favorites, plans, and Premium coaching features.</p>
+        <label style={labelStyle}>Email</label>
+        <input style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="coach@example.com" />
+        <label style={labelStyle}>Password</label>
+        <input style={inputStyle} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" />
+        {err && <p style={{ color: "#FF7A48", fontSize: 13, marginTop: 10 }}>{err}</p>}
+        {msg && <p style={{ color: "#7BC894", fontSize: 13, marginTop: 10 }}>{msg}</p>}
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18, flexWrap: "wrap" }}>
+          <button className="ghostBtn" onClick={onClose}>Cancel</button>
+          <button className="ghostBtn" disabled={busy} onClick={signUp}>Create account</button>
+          <button className="whistleBtn" disabled={busy} onClick={signIn}>{busy ? "..." : "Sign in"}</button>
+        </div>
       </div>
     </div>
   );
