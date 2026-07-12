@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
+const PREMIUM_LINK = "https://buy.stripe.com/test_00w3cx6ZB7tH0ykcLbak000";
+
 const supabase = createClient(
   "https://bzdjlvubytgztwnvoqqz.supabase.co",
   "sb_publishable_L3OhxoZ5_dwn1Z7JUzJWDg_TiQY4Tir"
@@ -6089,6 +6091,11 @@ export default function DrillFinder() {
               <div style={{ fontSize: 11, opacity: 0.7, padding: "0 12px 6px", wordBreak: "break-all" }}>
                 {session.user.email}{isPremium ? " · ⭐ Premium" : ""}
               </div>
+              {!isPremium && (
+                <a className="navBtn" style={{ display: "block", textDecoration: "none", background: CONE, color: GREEN_DK, fontWeight: 600 }}
+                  href={PREMIUM_LINK + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+                  target="_blank" rel="noopener">⭐ Go Premium — $8/mo</a>
+              )}
               <button className="navBtn" onClick={() => { supabase.auth.signOut(); setNavOpen(false); }}>🚪 Sign out</button>
             </>
           ) : (
@@ -6289,8 +6296,8 @@ function DrillCard({ drill, highlighted, isFav, inPlan, onFav, onPlan, onDelete,
       </div>
       <p style={{ ...S.desc, ...(open ? {} : S.descClamp) }}>{drill.desc}</p>
       {open && !premium && (COACHING[keyOf(drill)] || DIAGRAMS[keyOf(drill)]) && (
-        <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px dashed " + LINE, fontSize: 12, opacity: 0.65 }}>
-          🔒 Coaching points{DIAGRAMS[keyOf(drill)] ? " & tactical diagram" : ""} available with Premium
+        <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px dashed " + LINE, fontSize: 12, opacity: 0.75 }}>
+          🔒 Coaching points{DIAGRAMS[keyOf(drill)] ? " & tactical diagram" : ""} available with <strong style={{ color: CONE }}>Premium</strong> — ⭐ upgrade in the sidebar
         </div>
       )}
       {open && premium && COACHING[keyOf(drill)] && (
