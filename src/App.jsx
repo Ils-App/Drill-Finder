@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-const PREMIUM_LINK = "https://buy.stripe.com/test_00w3cx6ZB7tH0ykcLbak000";
+const PREMIUM_LINK = "https://buy.stripe.com/28E8wI7PzeqW3Ky9Yp2ZO00";
 
 const supabase = createClient(
   "https://bzdjlvubytgztwnvoqqz.supabase.co",
