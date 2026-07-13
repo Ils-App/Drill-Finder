@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const PREMIUM_LINK = "https://buy.stripe.com/28E8wI7PzeqW3Ky9Yp2ZO00";
+const PREMIUM_LINK_YEARLY = "https://buy.stripe.com/00w4gs3zj2Ieepc5I92ZO01";
 
 const supabase = createClient(
   "https://bzdjlvubytgztwnvoqqz.supabase.co",
@@ -6095,6 +6096,11 @@ export default function DrillFinder() {
                 <a className="navBtn" style={{ display: "block", textDecoration: "none", background: CONE, color: GREEN_DK, fontWeight: 600 }}
                   href={PREMIUM_LINK + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
                   target="_blank" rel="noopener">⭐ Go Premium — $8/mo</a>
+              )}
+              {!isPremium && (
+                <a className="navBtn" style={{ display: "block", textDecoration: "none", border: "1.5px solid " + CONE, color: CONE, fontWeight: 600, marginTop: 6 }}
+                  href={PREMIUM_LINK_YEARLY + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+                  target="_blank" rel="noopener">🏆 Yearly — $64/yr (save $32)</a>
               )}
               <button className="navBtn" onClick={() => { supabase.auth.signOut(); setNavOpen(false); }}>🚪 Sign out</button>
             </>
