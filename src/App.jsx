@@ -5968,6 +5968,7 @@ export default function DrillFinder() {
   const [duration, setDuration] = useState("All");
   const [highlight, setHighlight] = useState(null);
   const [sportSearch, setSportSearch] = useState("");
+  const [showPremium, setShowPremium] = useState(false);
   const [visibleCount, setVisibleCount] = useState(60);
   const [favsOnly, setFavsOnly] = useState(false);
   const [favorites, setFavorites] = useState(() => store.get("df_favorites", []));
