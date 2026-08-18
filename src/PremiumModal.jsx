@@ -29,14 +29,14 @@ export default function PremiumModal({ open, onClose, monthlyUrl, yearlyUrl }) {
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <h2 style={{ margin: "0 0 6px", fontSize: 24 }}>Drill Finder Premium</h2>
+        <h2 style={{ margin: "0 0 6px", fontSize: 24, color: "#12211C", opacity: 1 }}>Drill Finder Premium</h2>
         <p style={{ margin: "0 0 20px", color: "#5C6B64", fontSize: 15 }}>
           Here's everything you get.
         </p>
 
         <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px" }}>
           {FEATURES.map((f) => (
-            <li key={f} style={{ display: "flex", gap: 10, padding: "9px 0", fontSize: 15 }}>
+            <li key={f} style={{ display: "flex", gap: 10, padding: "9px 0", fontSize: 15, color: "#12211C", opacity: 1 }}>
               <span style={{ color: "#1B7A4B", fontWeight: 700 }}>✓</span>
               <span>{f}</span>
             </li>
