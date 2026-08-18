@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
+import PremiumModal from "./PremiumModal";
 
 const PREMIUM_LINK = "https://buy.stripe.com/28E8wI7PzeqW3Ky9Yp2ZO00";
 const PREMIUM_LINK_YEARLY = "https://buy.stripe.com/00w4gs3zj2Ieepc5I92ZO01";
