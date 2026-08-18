@@ -6096,12 +6096,12 @@ export default function DrillFinder() {
               </div>
               {!isPremium && (
                 <a className="navBtn" style={{ display: "block", textDecoration: "none", background: CONE, color: GREEN_DK, fontWeight: 600 }}
-                  href={PREMIUM_LINK + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+                  href="#" onClick={(e) => { e.preventDefault(); setShowPremium(true); }}
                   target="_blank" rel="noopener">⭐ Go Premium — $8/mo</a>
               )}
               {!isPremium && (
                 <a className="navBtn" style={{ display: "block", textDecoration: "none", border: "1.5px solid " + CONE, color: CONE, fontWeight: 600, marginTop: 6 }}
-                  href={PREMIUM_LINK_YEARLY + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+                  href="#" onClick={(e) => { e.preventDefault(); setShowPremium(true); }}
                   target="_blank" rel="noopener">🏆 Yearly — $64/yr (save $32)</a>
               )}
               <button className="navBtn" onClick={() => { supabase.auth.signOut(); setNavOpen(false); }}>🚪 Sign out</button>
