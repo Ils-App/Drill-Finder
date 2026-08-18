@@ -2,11 +2,12 @@ import React from "react";
 
 // EDIT THIS LIST — it's what coaches see before they pay
 const FEATURES = [
-  "Every drill in the library, all sports and age groups",
-  "Build and save practice plans",
-  "Filter by age, difficulty, equipment, and time",
-  "Print or share plans with your assistant coaches",
-  "New drills added every month",
+  "Coaching points for every drill — what to watch for and call out",
+  "Common mistakes, so you can spot them before they set in",
+  "How to make each drill easier for players who are struggling",
+  "How to make it harder for players who need more",
+  "Tactical diagrams showing setup and movement",
+  "Coaching tips from the drills that work",
 ];
 
 export default function PremiumModal({ open, onClose, monthlyUrl, yearlyUrl }) {
