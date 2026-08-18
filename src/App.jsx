@@ -6112,6 +6112,14 @@ export default function DrillFinder() {
         </div>
       </nav>
       {navOpen && <div className="navScrim noPrint" onClick={() => setNavOpen(false)} />}
+      {session && (
+  <PremiumModal
+    open={showPremium}
+    onClose={() => setShowPremium(false)}
+    monthlyUrl={PREMIUM_LINK + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+    yearlyUrl={PREMIUM_LINK_YEARLY + "?client_reference_id=" + session.user.id + "&prefilled_email=" + encodeURIComponent(session.user.email)}
+  />
+)}
 
       <div className="mainWrap">
       <header style={S.header} className="noPrint">
