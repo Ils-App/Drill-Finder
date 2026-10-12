@@ -6110,6 +6110,7 @@ export default function DrillFinder() {
             <button className="navBtn" onClick={() => { setShowAuth(true); setNavOpen(false); }}>👤 Sign in</button>
           )}
         </div>
+        <a className="navBtn" href="/privacy.html" target="_blank" rel="noopener" style={{ display: "block", textDecoration: "none", fontSize: 12, opacity: 0.7 }}>🔒 Privacy policy</a>
       </nav>
       {navOpen && <div className="navScrim noPrint" onClick={() => setNavOpen(false)} />}
       {session && (
